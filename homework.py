@@ -1,14 +1,14 @@
-from json.decoder import JSONDecodeError
 import logging
 import os
 import time
+from json.decoder import JSONDecodeError
 from logging import FileHandler
-from urllib3.exceptions import ConnectTimeoutError
 
 import requests
-from requests.models import HTTPError
 import telegram
 from dotenv import load_dotenv
+from requests.models import HTTPError
+from urllib3.exceptions import ConnectTimeoutError
 
 load_dotenv()
 
@@ -34,6 +34,9 @@ HOMEWORK_RESULT = 'У вас проверили работу "{homework_name}"!\
 REQUEST_ERROR = (
     'Error while requesting url {url} with params {params}:\n\n{error}'
 )
+TELEGRAM_ERROR = (
+    'Error while sending message via Telegram to chat id {chat_id}:\n\n{error}'
+)
 ERROR_MESSAGE = 'Bot is down with error: {error}'
 
 try:
@@ -45,6 +48,7 @@ try:
 except EnvironmentError as e:
     logging.error(f'Environment is not properly set: {e}')
     raise
+
 
 bot = telegram.Bot(TELEGRAM_TOKEN)
 
@@ -154,7 +158,24 @@ def parse_homework_status(homework):
 
 def send_message(message):
     logging.info('Sending message')
-    return bot.send_message(CHAT_ID, message)
+
+    try:
+        return bot.send_message(CHAT_ID, message)
+    except telegram.error.Unauthorized as e:
+        raise telegram.error.Unauthorized(TELEGRAM_ERROR.format(
+            chat_id=CHAT_ID,
+            error=e
+        ))
+    except telegram.error.TelegramError as e:
+        raise telegram.error.TelegramError(TELEGRAM_ERROR.format(
+            chat_id=CHAT_ID,
+            error=e
+        ))
+    except Exception as e:
+        raise Exception(TELEGRAM_ERROR.format(
+            chat_id=CHAT_ID,
+            error=e
+        ))
 
 
 def setup_logger():

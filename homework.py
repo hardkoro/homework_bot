@@ -18,7 +18,7 @@ class ParseHomeworkException(Exception):
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-URL = 'https://praktikum.yandex.ru/api/user_api/homework_statuses/'
+URL = 'https://praktiсum.yandex.ru/api/user_api/homework_statuses/'
 SLEEP_TIME = 5
 REQUEST_SLEEP_TIME = SLEEP_TIME * 60
 HOMEWORK_STATUSES = {

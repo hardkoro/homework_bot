@@ -46,10 +46,16 @@ Bot: [https://t.me/hardkoro_test_bot](https://t.me/hardkoro_test_bot)
   pip install -r requirements.txt
   ```
   
-- Create .env file:
+- Create & fill .env file:
 
   ```
   touch .env
+  ```
+
+  ```
+  PRAKTIKUM_TOKEN=...   /* your Yandex.Practicum Homrwork API token */
+  TELEGRAM_TOKEN=...    /* your Telegram bot token */
+  TELEGRAM_CHAT_ID=...  /* yout Telegram chat id */
   ```
   
 - Run homework.py:
